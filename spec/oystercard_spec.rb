@@ -21,7 +21,7 @@ describe Oystercard do
     # end
 
     it "should start off not in use" do
-      expect(subject.in_journey?).to be false
+      expect(subject.in_journey?).to be nil
     end
 
     context "Sufficient funds" do
@@ -35,13 +35,17 @@ describe Oystercard do
       it "should update status to false once touched out" do
         card.touch_in(station)
         card.touch_out
-        expect(card.in_journey?).to be false
+        expect(card.in_journey?).to be nil
       end
+
       it "should remember the entry station" do
-        card = Oystercard.new
-        card.top_up(10)
         card.touch_in(station)
         expect(card.entry_station).to eq station
+      end
+
+      it "should forget entry station on touch out" do
+        card.touch_in(station)
+        expect { card.touch_out }.to change{ card.entry_station }.from(station).to(nil)
       end
     end
 
