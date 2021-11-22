@@ -1,6 +1,7 @@
 require 'oystercard'
 describe Oystercard do
     let(:station) {double :station}
+    let(:station2) {double :station2}
 
     it "should have a balance of 0 when initialized" do
         expect(subject.balance).to eq 0
@@ -27,6 +28,7 @@ describe Oystercard do
     context "Sufficient funds" do
       card = Oystercard.new
       card.top_up(10)
+      
       it "should update status to true once touched in" do
         card.touch_in(station)
         expect(card.in_journey?).to be true
@@ -34,7 +36,7 @@ describe Oystercard do
 
       it "should update status to false once touched out" do
         card.touch_in(station)
-        card.touch_out
+        card.touch_out(station2)
         expect(card.in_journey?).to be nil
       end
 
@@ -45,7 +47,13 @@ describe Oystercard do
 
       it "should forget entry station on touch out" do
         card.touch_in(station)
-        expect { card.touch_out }.to change{ card.entry_station }.from(station).to(nil)
+        expect { card.touch_out(station2) }.to change{ card.entry_station }.from(station).to(nil)
+      end
+
+      it "should remember the exit station" do
+        card.touch_in(station)
+        card.touch_out(station2)
+        expect(card.exit_station).to eq station2
       end
     end
 
@@ -56,6 +64,6 @@ describe Oystercard do
     it "should deduct the minimum fare on touch out" do
         card = Oystercard.new
         card.top_up(1)
-        expect {card.touch_out}.to change{card.balance}.from(1).to(0)
+        expect {card.touch_out(station2)}.to change{card.balance}.from(1).to(0)
     end
 end
