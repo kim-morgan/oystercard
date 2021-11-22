@@ -18,4 +18,19 @@ describe Oystercard do
       expect(subject.deduct(10)).to eq 10
     end
 
+    it "should start off not in use" do
+      expect(subject.in_journey?).to be false
+    end
+
+    it "should update status to true once touched in" do
+      subject.touch_in
+      expect(subject.in_journey?).to be true
+    end
+
+    it "should update status to false once touched out" do
+      subject.touch_in
+      subject.touch_out
+      expect(subject.in_journey?).to be false
+    end
+
 end
