@@ -13,13 +13,13 @@ describe Oystercard do
         expect { subject.top_up(91)}.to raise_error 'can not top up more than £#{BALANCE_LIMIT}'
     end
 
-    it "should be able to deduct money from the balance" do
-      subject.top_up(20)
-      expect(subject.deduct(10)).to eq 10
-    end
+    # it "should be able to deduct money from the balance" do
+    #   subject.top_up(20)
+    #   expect(subject.deduct(10)).to eq 10
+    # end
 
     it "should start off not in use" do
-      expect(subject.in_journey?).to be false
+      expect(subject.in_journey).to be false
     end
 
     context "Sufficient funds" do
@@ -27,18 +27,24 @@ describe Oystercard do
       card.top_up(10)
       it "should update status to true once touched in" do
         card.touch_in
-        expect(card.in_journey?).to be true
+        expect(card.in_journey).to be true
       end
 
       it "should update status to false once touched out" do
         card.touch_in
         card.touch_out
-        expect(card.in_journey?).to be false
+        expect(card.in_journey).to be false
       end
     end
 
     it "should have a minimum fare of £1" do
       expect{subject.touch_in}.to raise_error 'Insufficient funds, minimum fare is £#{MINIMUM_FARE}'
+    end
+
+    it "should deduct the minimum fare on touch out" do
+        card = Oystercard.new
+        card.top_up(1)
+        expect {card.touch_out}.to change{card.balance}.from(1).to(0)
     end
 
 end
