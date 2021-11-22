@@ -22,15 +22,23 @@ describe Oystercard do
       expect(subject.in_journey?).to be false
     end
 
-    it "should update status to true once touched in" do
-      subject.touch_in
-      expect(subject.in_journey?).to be true
+    context "Sufficient funds" do
+      card = Oystercard.new
+      card.top_up(10)
+      it "should update status to true once touched in" do
+        card.touch_in
+        expect(card.in_journey?).to be true
+      end
+
+      it "should update status to false once touched out" do
+        card.touch_in
+        card.touch_out
+        expect(card.in_journey?).to be false
+      end
     end
 
-    it "should update status to false once touched out" do
-      subject.touch_in
-      subject.touch_out
-      expect(subject.in_journey?).to be false
+    it "should have a minimum fare of £1" do
+      expect{subject.touch_in}.to raise_error 'Insufficient funds, minimum fare is £#{MINIMUM_FARE}'
     end
 
 end
