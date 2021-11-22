@@ -10,4 +10,9 @@ class Oystercard
         fail 'can not top up more than £#{BALANCE_LIMIT}' if amount + @balance > BALANCE_LIMIT
         @balance += amount
     end
+
+    def deduct(amount)
+        @balance -= amount
+    end
+
 end
