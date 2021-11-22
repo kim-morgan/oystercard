@@ -50,10 +50,21 @@ describe Oystercard do
         expect { card.touch_out(station2) }.to change{ card.entry_station }.from(station).to(nil)
       end
 
-      it "should remember the exit station" do
+      xit "should remember the exit station" do
         card.touch_in(station)
         card.touch_out(station2)
         expect(card.exit_station).to eq station2
+      end
+
+      it "should remember a journey" do
+        card.touch_in("xxxxxx")
+        card.touch_out("yyyyy")
+        journey = {}
+        journey["xxxxxx"] = "yyyyy"
+        expect(card.journey_history).to match_array([journey])
+
+        Failure/Error: expect(card.journey_history).to match_array([journey])
+        #<Double :station> was originally created in one example but has leaked into another example and can no longer be used. rspec-mocks' doubles are designed to only last for one example, and you need to create a new one in each example you wish to use it for.
       end
     end
 
