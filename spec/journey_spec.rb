@@ -20,4 +20,9 @@ describe Journey do
         journey.exit_station("station2")
         expect(journey.complete?).to be true
     end
+
+    it "should know when a journey is not complete" do
+        journey = Journey.new("station")
+        expect(journey.complete?).to be false
+    end
 end

@@ -11,7 +11,6 @@ class Journey
     end
 
     def complete?
-        true
+        !@entry_station.nil? && !@exit_station.nil?
     end
-
 end
