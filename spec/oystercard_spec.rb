@@ -26,38 +26,38 @@ describe Oystercard do
     end
 
     context "Sufficient funds" do
-      card = Oystercard.new
-      card.top_up(10)
+      before do
+        @card = Oystercard.new
+        @card.top_up(10)
+      end
       
       it "should update status to true once touched in" do
-        card.touch_in(station)
-        expect(card.in_journey?).to be true
+        @card.touch_in(station)
+        expect(@card.in_journey?).to be true
       end
 
       it "should update status to false once touched out" do
-        card.touch_in(station)
-        card.touch_out(station2)
-        expect(card.in_journey?).to be nil
+        @card.touch_in(station)
+        @card.touch_out(station2)
+        expect(@card.in_journey?).to be nil
       end
 
       it "should remember the entry station" do
-        card.touch_in(station)
-        expect(card.entry_station).to eq station
+        @card.touch_in(station)
+        expect(@card.entry_station).to eq station
       end
 
       it "should forget entry station on touch out" do
-        card.touch_in(station)
-        expect { card.touch_out(station2) }.to change{ card.entry_station }.from(station).to(nil)
+        @card.touch_in(station)
+        expect { @card.touch_out(station2) }.to change{ @card.entry_station }.from(station).to(nil)
       end
 
       it "should remember a journey" do
-        card = Oystercard.new
-        card.top_up(10)
-        card.touch_in(station)
-        card.touch_out(station2)
+        @card.touch_in(station)
+        @card.touch_out(station2)
         journey = {}
         journey[station] = station2
-        expect(card.journey_history[0]).to eq(journey)
+        expect(@card.journey_history[0]).to eq(journey)
       end
 
       xit "should remember the exit station" do
@@ -65,7 +65,6 @@ describe Oystercard do
         card.touch_out(station2)
         expect(card.exit_station).to eq station2
       end
-
 
     end
 
