@@ -68,10 +68,15 @@ describe Oystercard do
         expect(@card.balance).to eq 10
       end
 
-      xit "should deduct a penalty fare at touch in if there is an incomplete journey on card" do
-        @card.touch_in(station)
-        @card.touch_in(station2)
-        expect(@card.balance).to eq 4
+      context "not first journey" do
+        before do
+          @card.journey_history << Journey.new
+        end
+
+        it "should deduct a penalty fare at touch in if there is an incomplete journey on card" do
+          @card.touch_in(station)
+          expect(@card.balance).to eq 4
+        end
       end
 
     end
