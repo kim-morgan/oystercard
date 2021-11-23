@@ -27,21 +27,10 @@ describe Oystercard do
         @card = Oystercard.new
         @card.top_up(10)
       end
-      
-      it "should update status to true once touched in" do
-        @card.touch_in(station)
-        expect(@card.in_journey?).to be true
-      end
-
-      xit "should update status to false once touched out" do
-        @card.touch_in(station)
-        @card.touch_out(station2)
-        expect(@card.in_journey?).to be nil
-      end
 
       it "should remember the entry station" do
         @card.touch_in(station)
-        expect(@card.entry_station).to eq station
+        expect(@card.journey.entry_station).to eq station
       end
 
       xit "should forget entry station on touch out" do
@@ -57,26 +46,26 @@ describe Oystercard do
         expect(@card.journey_history[0]).to eq(journey)
       end
 
-      xit "should remember the exit station" do
-        card.touch_in(station)
-        card.touch_out(station2)
-        expect(card.exit_station).to eq station2
-      end
-
       it "should create a new journey when touching in" do
         @card.touch_in(station)
         expect(@card.journey).to be_a_kind_of(Journey)
       end
 
+      it "should deduct minimum fare when a journey is complete" do
+        @card.touch_in(station)
+        @card.touch_out(station2)
+        expect(@card.balance).to eq 9
+      end
+
+      it "should update exit station when touching out" do
+        @card.touch_in(station)
+        @card.touch_out(station2)
+        expect(@card.journey.exit_station).to eq station2
+      end
+
     end
 
-    it "should have a minimum fare of £1" do
-      expect{subject.touch_in(station)}.to raise_error 'Insufficient funds, minimum fare is £#{MINIMUM_FARE}'
-    end
-
-    xit "should deduct the minimum fare on touch out" do
-        card = Oystercard.new
-        card.top_up(1)
-        expect {card.touch_out(station2)}.to change{card.balance}.from(1).to(0)
+   it "should have a minimum fare of £1" do
+      expect{subject.touch_in(station)}.to raise_error 'Insufficient funds, minimum fare is £#{Journey::MINIMUM_FARE}'
     end
 end
