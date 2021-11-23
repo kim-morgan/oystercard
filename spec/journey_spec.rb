@@ -1,4 +1,5 @@
 require 'journey'
+require 'oystercard'
 
 describe Journey do
     context "initialize" do
@@ -24,5 +25,18 @@ describe Journey do
     it "should know when a journey is not complete" do
         journey = Journey.new("station")
         expect(journey.complete?).to be false
+    end
+
+    context "calculate fare" do
+        it "should calculate minimum fare if journey is complete " do
+            journey = Journey.new("station")
+            journey.exit_station("station2")
+            expect(journey.fare).to eq Journey::MINIMUM_FARE
+        end 
+
+        it "should calculate penalty fare if journey is incomplete" do
+            journey = Journey.new("station")
+            expect(journey.fare).to eq Journey::PENALTY_FARE
+        end
     end
 end
