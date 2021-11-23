@@ -17,7 +17,7 @@ class Journey
     end
 
     def complete?
-        !@entry_station.nil? && !@exit_station.nil?
+        !(@entry_station.nil? || @exit_station.nil?)
     end
 
     def fare

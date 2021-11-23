@@ -79,6 +79,11 @@ describe Oystercard do
         end
       end
 
+      it "should deducate a penalty fare at touch out if there is an incomplete journey on card" do
+        @card.touch_out(station)
+        expect(@card.balance).to eq 4
+      end
+
     end
 
    it "should have a minimum fare of £1" do

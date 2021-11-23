@@ -10,7 +10,7 @@ class Oystercard
         @balance = 0
         @entry_station
         @journey_history = []
-        @journey = Journey.new("first journey")
+        @journey = Journey.new
 
     end
 
