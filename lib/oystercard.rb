@@ -10,7 +10,7 @@ class Oystercard
         @balance = 0
         @entry_station
         @journey_history = []
-        #@journey = {} => now created by Journey class
+        @journey = Journey.new("first journey")
 
     end
 
@@ -25,6 +25,7 @@ class Oystercard
 
     def touch_in(station)
         fail 'Insufficient funds, minimum fare is £#{Journey::MINIMUM_FARE}' if @balance < Journey::MINIMUM_FARE
+        deduct(@journey.fare) unless @journey_history.empty? || journey.complete?
         @journey = Journey.new(station)
         # @entry_station = station
     end
